@@ -35,8 +35,22 @@ local function duration(value)
     return durations[value] * quarter
 end 
 
+local function velocity(value)
+    local velocities = {
+        0x3f,
+        0x5f,
+        0x7f 
+    }
+    local result = velocities[3]
+
+    if value ~= nil and value ~= "" then
+        result = velocities[tonumber(value)]
+    end
+    return result
+end
+
 local function parse_note(s)
-    local letter, octave, value = string.match(s, "([A-Gs]+)(%d+)(%a+)")
+    local letter, octave, value, volume = string.match(s, "([A-Gs]+)(%d+)(%a+)(%d?)")
 
     if not (letter and octave and value) then
         return nil
@@ -44,7 +58,8 @@ local function parse_note(s)
 
     return {
         note = note(letter, octave),
-        duration = duration(value)
+        duration = duration(value),
+        velocity = velocity(volume)
     }
 end
 
@@ -52,18 +67,18 @@ local scheduler = require 'scheduler'
 
 local NOTE_DOWN = 0x90
 local NOTE_UP = 0x80
-local VELOCITY = 0x7f
+local VELOCITY = 0x7f  --7f is highest velocity
 
-local function play(note, duration)
-    midi_send(NOTE_DOWN, note, VELOCITY)
+local function play(note, duration, velocity)
+    midi_send(NOTE_DOWN, note, velocity)
     scheduler.wait(duration)
-    midi_send(NOTE_UP, note, VELOCITY)
+    midi_send(NOTE_UP, note, velocity)
 end
 
 local function part(t)
     local function play_part()
         for i = 1, #t do
-            play(t[i].note, t[i].duration)
+            play(t[i].note, t[i].duration, t[i].velocity)
         end
     end
 
