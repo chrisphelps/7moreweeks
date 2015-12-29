@@ -39,7 +39,14 @@ int main(int argc, const char* argv[])
     lua_pushcfunction(L, midi_send);
     lua_setglobal(L, "midi_send");
 
-    luaL_dofile(L, argv[1]);
+    luaL_dostring(L, "song = require 'notation'");
+
+    int res = luaL_dofile(L, argv[1]);
+
+    if (res == 1)
+        printf("Lua error: %s\n", lua_tostring(L, -1));
+    else
+        luaL_dostring(L, "song.go()");
 
     lua_close(L);
     return 0;
