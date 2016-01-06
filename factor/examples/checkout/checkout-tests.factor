@@ -7,3 +7,5 @@ IN: examples.checkout.tests
     2array ;
 
 { T{ checkout f 3 60.97 9.13 4.49 74.59 } } [ <sample-cart> <checkout> sample-checkout ] unit-test
+
+{ T{ checkout f 3 60.97 4.87 5.00 70.84 } } [ <sample-cart> <checkout> co-per-box ] unit-test
