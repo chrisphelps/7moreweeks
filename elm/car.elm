@@ -1,3 +1,5 @@
+-- Example code from 7 More Languages in 7 Weeks
+
 import Color exposing (..)
 import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)

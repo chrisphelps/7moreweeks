@@ -1,3 +1,5 @@
+-- Example code from 7 More Languages in 7 Weeks
+
 import Graphics.Element exposing (show)
 import Mouse
 import Window
