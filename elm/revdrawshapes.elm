@@ -9,14 +9,22 @@ import Graphics.Element exposing (..)
 import Time exposing (..)
 
 bluebox: Float -> Float -> Form
-bluebox x y = filled blue (rect 50 50) 
-  |> moveX x 
-  |> moveY -y
+bluebox x y = filled blue (rect 50 50) |> move (x, -y)
 
 redcircle: Float -> Float -> Form
-redcircle x y = filled red (circle 24)
-  |> moveX x
-  |> moveY -y
+redcircle x y = filled red (circle 24) |> move (x, -y)
+
+carBottom = filled black (rect 160 50)
+carTop = filled black (rect 100 60)
+tire = filled red (circle 24)  
+  
+car: Float -> Float -> Form
+car x y = group [
+  carBottom
+  , carTop |> moveY 30
+  , tire |> move (-40, -28)
+  , tire |> move (40, -28)
+  ] |> move (x, -y)
 
 calcx: Int -> Int -> Float
 calcx x w = toFloat x - toFloat w / 2
@@ -41,7 +49,7 @@ selectShape down =
   if down then
     redcircle
   else
-    bluebox
+    car
 
 draw: (Int, Int) -> (Int, Int) -> Bool -> Element
 draw (x, y) (w, h) down = collage w h [ selectShape down (calcx x w) (calcy y h) ]
@@ -68,5 +76,5 @@ leftToRight (w, h) x down = collage w h [ selectShape down (revcalcx x w) (calcy
 
 main = Signal.map3 leftToRight 
   Window.dimensions 
-  (count (every millisecond) ) 
+  (count (fps 60) ) 
   Mouse.isDown
