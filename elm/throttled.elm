@@ -27,14 +27,15 @@ calcx x w = toFloat x - toFloat w / 2
 
 revcalcx x w = 
   let
-    dir = x < w
-    fx = toFloat x
+    modx = x % w
+    dir = x // w % 2 == 0
+    fx = toFloat modx
     fw = toFloat w
   in
     if dir then
       fx - fw / 2
     else
-      -(fx - fw - fw / 2)
+      -(fx - fw / 2)
       
 
 calcy: Int -> Int -> Float
@@ -49,12 +50,6 @@ count signal = Signal.foldp (\x n -> n + (speed x) * 1) 1 signal
 
 
 leftToRight (w, h) x = collage w h [ car (revcalcx x w) (calcy 500 h) ]
-
---main = Signal.map show (Signal.sampleOn (fps 5) Mouse.x)
-
---main = Signal.map show (Signal.map speed (Signal.sampleOn (fps 5) Mouse.x))
-
---main = Signal.map show (count (Signal.sampleOn (fps 5) Mouse.x )) 
 
 main = Signal.map2 leftToRight 
   Window.dimensions 
