@@ -71,3 +71,18 @@ end
 
 # iex(69)> Words.word_count([:foo, :bar, :foo, :baz])
 # [foo: 2, bar: 1, baz: 1]
+
+
+# Hard ex 1
+
+defmodule Tree do
+    def traverse(value), do: traverse_worker(value, 0)
+    def traverse_worker({first, second, third}, depth) do
+        IO.puts(String.rjust(first, depth * 4 + String.length(first)))
+        traverse_worker(second, depth + 1)
+        traverse_worker(third, depth + 1)
+    end
+    def traverse_worker(value, depth) do
+        IO.puts(String.rjust(value, depth * 4 + String.length(value)))
+    end
+end
