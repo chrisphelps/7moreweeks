@@ -20,6 +20,12 @@ defmodule ConcreteTest do
     assert 3 == vid.times_rented
   end
 
+  should "find video" do
+    import VideoStore.Concrete
+    vid = video |> rent |> lose |> find
+    assert :available == vid.state
+    assert 3 == Enum.count(vid.log)
+  end
 
   def video, do: %Video{title: "XMen"}
 
